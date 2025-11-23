@@ -3,26 +3,4 @@ pandas
 matplotlib
 Werkzeug
 sqllite3
-
-
-https://www.kaggle.com/datasets/jalota/books-dataset
-
-DAB111_G13_Project/
-│ app.py
-│
-├─database/
-│   data.db
-│
-├─website/
-│   └─templates/
-│       base.html
-│       index.html
-│       about.html
-│       data.html
-│       upload.html
-│       add.html
-│       delete.html
-│
-└─static/
-    └─css/
-        style.css
+numpy
