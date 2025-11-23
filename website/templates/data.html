@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Books Data{% endblock %}
+
+{% block content %}
+<h2>Books Table</h2>
+
+<!-- Search Form -->
+<form method="get" action="{{ url_for('data_page') }}" class="search-form">
+    <input type="text" name="search" placeholder="Search by Title..." value="{{ request.args.get('search', '') }}">
+    <button type="submit">Search</button>
+    <a href="{{ url_for('data_page') }}" class="clear-btn">Clear</a>
+</form>
+
+{% if rows %}
+<table class="data-table">
+    <thead>
+        <tr>
+            {% for col in columns %}
+            <th>{{ col }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in rows %}
+        <tr>
+            {% for col in columns %}
+            <td>{{ row[col] }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p><em>No data found.</em></p>
+{% endif %}
+{% endblock %}

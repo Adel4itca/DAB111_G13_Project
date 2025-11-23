@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}About Dataset{% endblock %}
+
+{% block content %}
+<div class="container">
+
+    <h1 class="page-title">About the Book Dataset Project</h1>
+
+    <!-- Student Info Card -->
+    <section class="section-card">
+        <h2 class="section-title">Student Information</h2>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Student Number</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Adel Hasan</td>
+                    <td>0888146</td>
+                </tr>
+                <tr>
+                    <td>Sumit Singh Gulshan</td>
+                    <td>0888735</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Dataset Info Card -->
+    <section class="section-card">
+        <h2 class="section-title">About the Dataset</h2>
+
+        <p><strong>Dataset Name:</strong> {{ dataset.name }}</p>
+        <p><strong>Description:</strong> {{ dataset.description }}</p>
+        <p><strong>Data Source:</strong> {{ dataset.source }}</p>
+
+        <p><strong>Total Records in Original Dataset:</strong> {{ total_records_csv }}</p>
+        <p><strong>Records Selected for Project:</strong> {{ dataset.selected_records }}</p>
+    </section>
+
+    <!-- Variables Table Card -->
+    <section class="section-card">
+        <h2 class="section-title">Variables in the Dataset</h2>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for var in variables %}
+                <tr>
+                    <td>{{ var.name }}</td>
+                    <td>{{ var.type }}</td>
+                    <td>{{ var.description }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+
+</div>
+{% endblock %}

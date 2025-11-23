@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Histogram Stats{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="page-title">Histogram: Categories by Book Count</h2>
+
+    {% if plot_url %}
+        <img src="data:image/png;base64,{{ plot_url }}"
+             alt="Histogram of Category Book Counts"
+             style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.15);">
+    {% else %}
+        <p><em>No data to display.</em></p>
+    {% endif %}
+</div>
+{% endblock %}
