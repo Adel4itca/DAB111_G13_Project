@@ -128,7 +128,7 @@ Open in browser:
 -   Adel Hasan 0888146
 -   Sumit Singh Gulshan 0888735
 
-## 📜 License
+## License
 
 This project is for educational use for the DAB111 course at St. Clair
 College.
