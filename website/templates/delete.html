@@ -3,21 +3,29 @@
 {% block title %}Delete Book{% endblock %}
 
 {% block content %}
+
 <h2>Delete Book</h2>
 
-<form method="post" class="data-form">
-    <div class="form-row">
-        <label for="BookID">Book ID to delete:</label>
-        <input type="number" id="BookID" name="BookID" required>
-    </div>
+<div class="container">
 
-    <button type="submit">Delete</button>
-</form>
+    {% if error %}
+        <div class="message-box error">
+            {{ error }}
+        </div>
+    {% endif %}
 
-{% if message %}
-<div class="message">
-    {{ message }}
+    {% if message %}
+        <div class="message-box">
+            {{ message }}
+        </div>
+    {% endif %}
+
+    <form method="POST" action="/delete">
+        <label for="BookID">Book ID to delete:</label><br><br>
+        <input type="text" id="BookID" name="BookID" placeholder="Enter Book ID">
+        <button type="submit">Delete</button>
+    </form>
+
 </div>
-{% endif %}
 
 {% endblock %}

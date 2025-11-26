@@ -1,160 +1,273 @@
-````markdown
-# DAB111 Group 13 – Flask Data Website Project
+# **DAB111 Group 13 – Flask Data Website Project**
 
-This project is developed for the **DAB111 / DBA111** course at St. Clair College.  
-It is a Flask-based web application that allows users to upload CSV files, convert them into SQLite database tables, display the data, and interact with it through a simple web interface.
+This project was developed as part of the **DAB111 / DBA111** course at **St. Clair College**.
+It is a complete **Flask web application** that allows users to upload book data, convert it into a SQLite database, view and search the dataset, perform CRUD operations, and generate statistics and visualizations.
 
-## Dataset Information
+The project demonstrates core concepts of **databases, Python programming, web development, and data analytics**, aligned with course requirements.
 
-### About the Dataset
-This dataset was created as a result of practicing scraping using the `requests` and `bs4` libraries in Python. Web scraping or collecting data is one of the most basic and important steps for any data-related field. This was my attempt to do scraping and present it clearly and understandably. The notebook for scraping, along with comments, is in the code section of the original dataset. The data has also been cleaned as required.
+---
 
-**Dataset Source:**  
-https://www.kaggle.com/datasets/jalota/books-dataset
+## **Application Flowchart**
 
-### The dataset has attributes/columns as follows:
-- Title: The title of the book.
-- Category: Category of the book.
-- Price: The price of the book.
-- Price After Tax: The cost of the book including tax.
-- Tax Amount: Tax on the book.
-- Availability: The quantity available in stock.
-- Number of Reviews: Number of people who reviewed the book.
-- Book Description: Description of the book.
-- Image Link: Link to the image of the book.
-- Stars: Star rating for each book out of 5.
+The following flowchart explains the full workflow of the Flask application, including routing, database validation, CSV upload, CRUD operations, and statistics generation.
 
-### What can we do with this?
-We can perform Exploratory Data Analysis, clustering of books by category, and build a content-based recommendation engine using various fields from the book description.
+![Flowchart](static/images/FlowChart.png)
 
-### File Format
-CSV format.
+---
 
-### License
-Refer to the dataset's Kaggle page for usage terms.
+# **Features of the Application**
 
-## Features
+### **1. CSV Upload System**
 
-###  1. Data Upload System
+* Upload a dataset file (`.csv`) containing book data.
+* Automatically reads the file using **Pandas**.
+* Stores the first 500 rows into a SQLite database table named **books**.
 
-- Upload a `Book_Dataset_1.csv` file
-- Uses `pandas` to read CSV files
-- Uses `sqlite3` to write tables into the database
+---
 
-###  2. SQLite Database Integration
+### **2. Database Integration (SQLite)**
 
-- Database: `books.db`
-- Automatic table creation (if not exists)
+* The system uses a local **books.db** database.
+* Automatically creates or replaces the `books` table when uploading new data.
+* Ensures fast and efficient data storage and retrieval.
 
-###  3. Flask Web UI (Jinja2 Templates)
+---
 
-- `home.html` – Homepage  
-- `about.html` – Shows statistics, counts, metadata  
-- `data.html` – Display selected table  
-- `upload.html` – Upload CSV file  
-- `add.html` – Add a new record  
-- `delete.html` – Delete records  
-- `hist_stats.html` – Statistics & charts  
-- `base.html` – Base template for all pages
+### **3. Search and Data Viewing**
 
-###  4. Static Assets
+The **Data** page allows users to:
 
-- CSS styles under `static/css/`
-- Images under `static/images/`
+* View the entire books table
+* Search by:
 
-##  Project Structure
+  * **Title**
+  * **Category**
+  * **BookID**
+* Uses SQL `LIKE` queries to support partial matches.
 
-    DAB111_G13_Project/
-    │
-    ├── app.py
-    ├── requirements.txt
-    ├── README.md
-    │
-    ├── database/
-    │   └── books.db
-    │
-    ├── data_collection/
-    │   └── (uploaded CSV files)
-    │
-    ├── static/
-    │   ├── css/
-    │   │   └── style.css
-    │   └── images/
-    │
-    └── website/
-        ├── templates/
-        │   ├── base.html
-        │   ├── home.html
-        │   ├── about.html
-        │   ├── data.html
-        │   ├── upload.html
-        │   ├── add.html
-        │   ├── delete.html
-        │   └── hist_stats.html
+---
 
-## Installation & Setup
+### **4. Application Functions **
 
-### 1. Clone the Repository
+* **Create:** Add new book records through a web form
+* **Read:** View and filter book data
+* **Delete:** Remove any book by its BookID
+
+These operations are integrated with SQLite for persistent storage.
+
+---
+
+### **5. Visual Analytics**
+
+* The **Statistics** page generates a histogram showing how often each category appears.
+* Plot is created with **Matplotlib** and saved under `static/images/` so it can be displayed in the browser.
+
+---
+
+### **6. Clean & Organized Web UI**
+
+The Flask application uses:
+
+
+* Navigation menu for all pages
+* Error messages when database/table is missing
+* Success messages after actions (upload, add, delete)
+
+---
+
+### **7. Error Handling**
+
+The app  handles:
+
+* Missing database file
+* Missing books table
+* Invalid CSV uploads
+* Empty search queries
+* Nonexistent BookID during deletion
+
+---
+
+# **Dataset Information**
+
+### **About the Dataset**
+
+The dataset was found in kaggle for students analyses .The scraped dataset was cleaned and published on Kaggle.
+
+**Original dataset source:**
+[https://www.kaggle.com/datasets/jalota/books-dataset](https://www.kaggle.com/datasets/jalota/books-dataset)
+
+---
+
+### **Dataset Fields**
+
+| Column Name           | Description                  |
+| --------------------- | ---------------------------- |
+| **BookID**            | Unique ID of each book       |
+| **Title**             | Full book title              |
+| **Category**          | Genre/category               |
+| **Price**             | Price before tax             |
+| **Price_After_Tax**   | Final price including tax    |
+| **Tax_amount**        | Applied tax amount           |
+| **Availability**      | Books in stock               |
+| **Number_of_reviews** | Number of customer reviews   |
+| **Book_Description**  | Summary/overview of the book |
+| **Image_Link**        | URL to cover image           |
+| **Stars**             | Rating (0–5)                 |
+
+---
+
+#  **Project Structure**
+
+```
+DAB111_G13_Project/
+│
+├── app.py
+├── README.md
+├── requirements.txt
+│
+├── database/
+│   └── books.db
+│
+├── data_collection/
+│   └── (uploaded CSV files)
+│
+├── static/
+│   ├── css/
+│   │   └── style.css
+│   └── images/
+│       └── FlowChart.png
+│
+└── website/
+    ├── templates/
+    │   ├── base.html
+    │   ├── home.html
+    │   ├── about.html
+    │   ├── data.html
+    │   ├── upload.html
+    │   ├── add.html
+    │   ├── delete.html
+    │   └── hist_stats.html
+```
+
+---
+
+#  **Installation & Setup**
+
+### **1. Clone the Repository**
 
 ```bash
 git clone https://github.com/Adel4itca/DAB111_G13_Project.git
 cd DAB111_G13_Project
-````
+```
 
-###  Create a Virtual Environment
+### **2. Create a Virtual Environment**
 
 ```bash
 python -m venv venv
 ```
 
-###  Install Dependencies
+### **3. Activate the Virtual Environment**
+
+**Windows:**
+
+```bash
+venv\Scripts\activate
+```
+
+**Mac/Linux:**
+
+```bash
+source venv/bin/activate
+```
+
+### **4. Install Dependencies**
 
 ```bash
 pip install -r requirements.txt
 ```
 
-##  Run the Application
-
-Start Flask:
+### **5. Run the Application**
 
 ```bash
 python app.py
 ```
 
-Open in a browser:
+Open your browser:
+👉 [http://127.0.0.1:5000](http://127.0.0.1:5000)
 
-[http://127.0.0.1:5000](http://127.0.0.1:5000)
+---
 
-## How to Upload CSV Files
+# 🧭 **How to Use the Application**
 
-1. Go to the **Upload** page
-2. Select a `.csv` file based on the books dataset
-3. Click **Upload**
-4. Data is stored in **SQLite** automatically
+### **1. Home Page**
 
-## Data Pages
+Basic welcome page and navigation.
 
-* View tables
-* Search data
-* Add new records
-* Delete records
-* View statistics (record count, selected rows, charts)
+---
 
-## Technologies Used
+### **2. Upload CSV**
 
-* Python 3
-* Flask
-* SQLite
-* Pandas
-* Matplotlib
-* HTML/CSS (Jinja2 templates)
+* Navigate to **Upload**
+* Select a `.csv` dataset
+* The system loads the data into SQLite
 
-## Team Members — Group 13
+---
 
-* Adel Hasan – 0888146
-* Sumit Singh Gulshan – 0888735
+### **3. View Data**
 
-##License
+* View all books
+* Search using title, category, or BookID
+* Displayed in a clean, scrollable table
 
-This project is for educational use for the DAB111 course at St. Clair
-College.
+---
+
+### **4. Add New Book**
+
+* Fill the form fields
+* Submit to insert a new record into SQLite
+* Confirmation message appears
+
+---
+
+### **5. Delete Book**
+
+* Enter the BookID to delete
+* The system removes it from SQLite
+* Shows success or "not found" message
+
+---
+
+### **6. Statistics**
+
+* Generates histogram for category frequency
+* Automatically updates if database changes
+
+---
+
+
+#  **Technologies Used**
+
+* **Python 3.12+**
+* **Flask Framework**
+* **SQLite**
+* **Pandas**
+* **Matplotlib**
+* **HTML / CSS**
+* **Jinja2 Templates**
+
+---
+
+#  **Team Members — Group 13**
+
+| Name                    | Student ID |
+| ----------------------- | ---------- |
+| **Adel Hasan**          | 0888146    |
+| **Sumit Singh Gulshan** | 0888735    |
+
+---
+
+#  **License**
+
+This project is created solely for educational use in the
+**DAB111 – Database Fundamentals** course at **St. Clair College**.
+

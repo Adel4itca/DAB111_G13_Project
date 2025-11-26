@@ -3,35 +3,94 @@
 {% block title %}Books Data{% endblock %}
 
 {% block content %}
-<h2>Books Table</h2>
 
-<!-- Search Form -->
-<form method="get" action="{{ url_for('data_page') }}" class="search-form">
-    <input type="text" name="search" placeholder="Search by Title..." value="{{ request.args.get('search', '') }}">
-    <button type="submit">Search</button>
-    <a href="{{ url_for('data_page') }}" class="clear-btn">Clear</a>
-</form>
+<h2>Books Data</h2>
 
-{% if rows %}
-<table class="data-table">
-    <thead>
-        <tr>
-            {% for col in columns %}
-            <th>{{ col }}</th>
-            {% endfor %}
-        </tr>
-    </thead>
-    <tbody>
-        {% for row in rows %}
-        <tr>
-            {% for col in columns %}
-            <td>{{ row[col] }}</td>
-            {% endfor %}
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-{% else %}
-<p><em>No data found.</em></p>
-{% endif %}
+<div class="container">
+
+    <!-- Show error (if any) -->
+    {% if error %}
+        <div class="message-box error">
+            {{ error }}
+        </div>
+    {% endif %}
+
+    <!-- Search Bar -->
+    <form method="GET" action="/data" class="search-form">
+        <input type="text"
+               name="search"
+               placeholder="Search by Title or Category"
+               value="{{ request.args.get('search', '') }}">
+        <button type="submit">Search</button>
+    </form>
+
+    <br>
+
+    <!-- Show table only if data exists -->
+    {% if rows %}
+
+        <!-- Scrollable table wrapper -->
+        <div class="table-wrapper">
+            <table class="books-table">
+                <thead>
+                    <tr>
+                        {% for col in columns %}
+                            <th>{{ col }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for row in rows %}
+                    <tr>
+                        {% for col in columns %}
+
+                            {# Special display for Book_Description #}
+                            {% if col == 'Book_Description' %}
+                                <td class="book-description">
+                                    <details class="desc-details">
+                                        <summary>View</summary>
+                                        <div class="desc-text">
+                                            {{ row[col] }}
+                                        </div>
+                                    </details>
+                                </td>
+
+                            {# Special display for Image_Link #}
+                            {% elif col == 'Image_Link' %}
+                                <td class="image-link">
+                                    <details class="desc-details">
+                                        <summary>View</summary>
+                                        <div class="desc-text">
+                                            {% if row[col] %}
+                                                <a href="{{ row[col] }}" target="_blank">
+                                                    {{ row[col] }}
+                                                </a>
+                                            {% else %}
+                                                No image link
+                                            {% endif %}
+                                        </div>
+                                    </details>
+                                </td>
+
+                            {# Normal columns #}
+                            {% else %}
+                                <td>{{ row[col] }}</td>
+                            {% endif %}
+
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    {% else %}
+        {% if not error %}
+            <p>No data found.</p>
+        {% endif %}
+    {% endif %}
+
+</div>
+
 {% endblock %}

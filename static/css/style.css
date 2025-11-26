@@ -6,6 +6,12 @@ body {
     background-color: #f7f9fc;
 }
 
+/* prevent page itself from going wider than screen */
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
 h1 {
     color: #003399;
 }
@@ -34,6 +40,11 @@ nav a:hover {
     text-decoration: underline;
 }
 
+.nav-red {
+    color: red !important;
+    font-weight: bold;
+}
+
 /* ===== Back Link ===== */
 
 .back-link {
@@ -59,7 +70,7 @@ nav a:hover {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* ===== Tables ===== */
+/* ===== Generic Tables (small info tables etc.) ===== */
 
 .data-table,
 .info-table {
@@ -87,7 +98,7 @@ nav a:hover {
     background-color: #f4f6fb;
 }
 
-/* ===== Forms ===== */
+/* ===== Forms (normal forms like upload, delete, etc.) ===== */
 
 .data-form,
 .upload-form {
@@ -95,33 +106,48 @@ nav a:hover {
     margin-bottom: 20px;
 }
 
-.form-row {
+/* normal label:input rows */
+.data-form .form-row,
+.upload-form .form-row {
     margin-bottom: 10px;
 }
 
-.form-row label {
+.data-form .form-row label,
+.upload-form .form-row label {
     display: inline-block;
     width: 130px;
     font-weight: bold;
 }
 
-.form-row input {
+.data-form .form-row input,
+.upload-form .form-row input {
     padding: 5px;
     width: 220px;
 }
 
+/* ===== Buttons ===== */
+
 button {
-    padding: 6px 14px;
-    border-radius: 4px;
+    width: 180px;   /* smaller width */
+    padding: 8px 12px;
+    font-size: 14px;
+    border-radius: 6px;
+    background-color: #0066ff;
+    color: white;
     border: none;
     cursor: pointer;
-    background-color: #0055cc;
-    color: white;
-    font-weight: bold;
 }
 
 button:hover {
-    background-color: #003f99;
+    background-color: #004ec9;
+}
+
+/* center the main submit button inside forms if needed */
+.grid-form button[type="submit"],
+.data-form button[type="submit"],
+.upload-form button[type="submit"] {
+    display: block;
+    margin: 10px auto;
 }
 
 /* ===== Messages ===== */
@@ -132,4 +158,132 @@ button:hover {
     border-radius: 4px;
     background-color: #e0f3e0;
     border: 1px solid #8ac28a;
+}
+
+.message-box.error {
+    background: #ffe6e6;
+    border-left: 5px solid #cc0000;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 6px;
+    color: #660000;
+}
+
+/* ===== Generic table (fallback) ===== */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+td, th {
+    padding: 8px;
+    border: 1px solid #ccc;
+}
+
+th {
+    background-color: #003399;
+    color: white;
+}
+
+/* ===== Add Book form: 3x3 grid ===== */
+
+.grid-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* only form rows inside .grid-form become grid */
+.grid-form .form-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+}
+
+.form-group label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 6px;
+    white-space: nowrap;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+/* inline label+input if needed somewhere */
+.inline-field {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ===== Books Data table & scrolling ===== */
+
+/* wrapper keeps table inside page and adds its own horizontal scroll */
+.table-wrapper {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;      /* horizontal scroll if needed */
+    margin-top: 15px;
+    display: block;
+}
+
+/* main books table */
+.books-table {
+    width: 100%;
+    font-size: 12px;
+    border-collapse: collapse;
+    table-layout: fixed;   /* helps control column width and wrap */
+}
+
+/* cells & headers inside books table */
+/* Header cells: DO NOT wrap */
+.books-table th {
+    padding: 8px;
+    border: 1px solid #ddd;
+    text-align: left;
+    white-space: nowrap;     /* ❗ Header stays in one line */
+    background-color: #003399;
+    color: white;
+}
+
+/* Data cells: CAN wrap */
+.books-table td {
+    padding: 8px;
+    border: 1px solid #ddd;
+    text-align: left;
+    word-break: break-word;     /* break long words */
+    overflow-wrap: anywhere;    /* wrap long URLs/text */
+    white-space: normal;        /* allow wrapping */
+}
+
+/* specifically control description column width */
+.books-table td.book-description {
+    max-width: 300px;
+}
+
+/* ===== Search bar on Data page ===== */
+
+.search-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.search-form input {
+    flex: 1;
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.search-form button {
+    width: auto;
+    padding: 8px 14px;
 }
