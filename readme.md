@@ -4,7 +4,6 @@
 This project is a complete **Flask-based data application** developed for the DAB111 course. It allows users to upload book datasets, store them in SQLite, search & view records, perform CRUD operations, and generate category-based statistical visualizations.
 
 It demonstrates skills in **databases, Flask, Python programming**.
-
 ---
 
 #  **Application Flowchart**
