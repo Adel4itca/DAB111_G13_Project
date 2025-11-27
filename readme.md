@@ -14,68 +14,9 @@ This flowchart explains the full workflow of the Flask application, including fi
 
 ![Flowchart](static/images/FlowChart.png)
 
----
 
-#  **Application Pseudocode**
 
-The following pseudocode summarizes the complete backend logic of the Flask project:
 
-```
-BEGIN
-
-1. Upload Excel/CSV File
-    PROMPT user to select a file
-    READ file using pandas
-    IF file is invalid THEN
-        DISPLAY error message
-        STOP
-    ENDIF
-
-2. Convert to SQLite Database
-    CREATE database connection
-    CREATE books table (if not exists)
-    INSERT uploaded data into database
-
-3. View Data Page
-    SELECT * FROM books
-    DISPLAY results in HTML table
-
-4. Search Function
-    READ user search input
-    IF search is not empty THEN
-         FILTER rows by Title, Category, or BookID
-    ENDIF
-    DISPLAY filtered results
-
-5. Add New Book
-    READ form inputs
-    VALIDATE fields
-    IF validation fails THEN
-         SHOW error message
-    ELSE
-         INSERT new book into database
-         SHOW success message
-    ENDIF
-
-6. Delete Book
-    READ BookID from form
-    IF BookID exists THEN
-         DELETE the row
-         SHOW success message
-    ELSE
-         SHOW "Book not found" error
-    ENDIF
-
-7. Statistics Page
-    CALCULATE category counts
-    GENERATE histogram using Matplotlib
-    SAVE plot to /static/images
-    DISPLAY the image on the webpage
-
-END 
-```
-
----
 
 #  **Key Features**
 
