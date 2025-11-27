@@ -72,7 +72,7 @@ BEGIN
     SAVE plot to /static/images
     DISPLAY the image on the webpage
 
-END
+END 
 ```
 
 ---
