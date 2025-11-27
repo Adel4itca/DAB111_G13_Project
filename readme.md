@@ -4,6 +4,24 @@
 This project is a complete **Flask-based data application** developed for the DAB111 course. It allows users to upload book datasets, store them in SQLite, search & view records, perform CRUD operations, and generate category-based statistical visualizations.
 
 It demonstrates skills in **databases, Flask, Python programming**.
+
+
+This project is organized into two primary components.
+
+The first part of this project focuses on preparing the dataset before loading it into the Flask application.
+All steps in part  come directly from the data-processing notebook as the follwing:[Ref files](https://htmlpreview.github.io/?https://github.com/Adel4itca/DAB111_G13_Project/blob/main/data%20processing/DAB111_Process_Data.html)
+1- Dataset Information
+    About the Dataset
+    Dataset Dictionary
+2- Data Loading
+3- Data Cleaning and Preprocessing
+    Drop irrelevant features in our dataset
+    Check and rename/ modify some column names
+    Check for missing values
+    Remove all the rows with missing values If it exists
+4- Create  new clean CSV file to data collection folder to upload to Data Base
+
+The second  part of this project focuses on develop application allows users to upload book datasets, store them in SQLite, search & view records, perform CRUD operations, and generate category-based statistical visualizations
 ---
 
 #  **Application Flowchart**
