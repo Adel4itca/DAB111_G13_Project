@@ -1,36 +1,34 @@
 {% extends "base.html" %}
+
 {% block title %}Home{% endblock %}
 
 {% block content %}
-
-<div class="container">
+<div class="card">
     <h2>Welcome to the DAB111 Group Project</h2>
 
     <p>
-        This project integrates <strong>data collection</strong>, <strong>data processing</strong>, 
-        <strong>database storage</strong>, and <strong>web development</strong> into a single hands-on system.
-        It demonstrates practical skills in <strong>Python programming</strong>, <strong>SQL operations</strong>, 
-        and <strong>Flask-based application development</strong>, fully aligning with all 
-        <strong>DAB111 course requirements</strong>.
+        This web application was developed as part of the DAB111 course to demonstrate 
+        the complete data workflow from raw data to a fully functional Flask-based system. 
+        The project integrates <strong>data collection</strong>, <strong>data cleaning</strong>, 
+        <strong>database management</strong>, and <strong>web development</strong>.
     </p>
 
     <p>
-        Through this project, we work with real datasets, convert them into a structured 
-        <strong>SQLite database</strong>, and build a full website to explore and manage the data. The website allows:
+        Using this system, you can perform the following tasks:
     </p>
 
     <ul>
-        <li>Viewing summary information about the dataset</li>
-        <li>Displaying all records from the database</li>
-        <li>Uploading Excel files and inserting them into the SQLite database</li>
-        <li>Adding new records manually</li>
-        <li>Deleting records</li>
-        <li>Visualizing data through histograms</li>
+        <li>View summary information about the dataset</li>
+        <li>Display all book records stored in the SQLite database</li>
+        <li>Upload Excel/CSV files and automatically insert them into the database</li>
+        <li>Add new book records manually</li>
+        <li>Delete book records using BookID</li>
+        <li>Analyze category distribution through histograms</li>
     </ul>
 
     <p>
-        This system demonstrates the complete workflow from raw data →  database → website.
+        This platform provides a hands-on experience combining 
+        Python programming, SQL queries, Flask development, and data visualization.
     </p>
 </div>
-
 {% endblock %}
