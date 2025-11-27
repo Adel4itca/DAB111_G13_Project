@@ -14,16 +14,16 @@ First Part:
 
 The first part of this project focuses on preparing the dataset before loading it into the Flask application.
 All steps in part  come directly from the data-processing notebook as the follwing:[Ref files](https://htmlpreview.github.io/?https://github.com/Adel4itca/DAB111_G13_Project/blob/main/data%20processing/DAB111_Process_Data.html)
-1- Dataset Information
-    About the Dataset
-    Dataset Dictionary
-2- Data Loading
-3- Data Cleaning and Preprocessing
-    Drop irrelevant features in our dataset
-    Check and rename/ modify some column names
-    Check for missing values
-    Remove all the rows with missing values If it exists
-4- Create  new clean CSV file to data collection folder to upload to Data Base
+* 1- Dataset Information
+    * About the Dataset
+    * Dataset Dictionary
+* 2- Data Loading
+* 3- Data Cleaning and Preprocessing
+    * Drop irrelevant features in our dataset
+    * Check and rename/ modify some column names
+    * Check for missing values
+    * Remove all the rows with missing values If it exists
+* 4- Create  new clean CSV file to data collection folder to upload to Data Base
 
 Second Part:
 ---
