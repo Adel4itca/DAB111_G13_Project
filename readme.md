@@ -80,28 +80,6 @@ Supports partial matching using SQL `LIKE`.
 
 ---
 
-#  **Dataset Information**
-
-Dataset Source (Kaggle):
-[https://www.kaggle.com/datasets/jalota/books-dataset](https://www.kaggle.com/datasets/jalota/books-dataset)
-
-### **Dataset Columns**
-
-| Column Name       | Description               |
-| ----------------- | ------------------------- |
-| BookID            | Unique book identifier    |
-| Title             | Name of the book          |
-| Category          | Genre/category            |
-| Price             | Price before tax          |
-| Price_After_Tax   | Final price including tax |
-| Tax_amount        | Applied tax amount        |
-| Availability      | Stock availability        |
-| Number_of_reviews | Number of reviews         |
-| Book_Description  | Summary of book           |
-| Image_Link        | Cover image URL           |
-| Stars             | Rating (0–5)              |
-
----
 
 # **Project Structure**
 
