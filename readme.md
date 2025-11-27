@@ -114,7 +114,7 @@ DAB111_G13_Project/
 
 ---
 
-# ⚙️ **Installation & Setup**
+#  **Installation & Setup**
 
 ### **1. Clone Repo**
 
@@ -156,11 +156,11 @@ python app.py
 ```
 
 Visit:
-👉 [http://127.0.0.1:5000](http://127.0.0.1:5000)
+[http://127.0.0.1:5000](http://127.0.0.1:5000)
 
 ---
 
-# 🧭 **How to Use the App**
+#  **How to Use the App**
 
 ### **Upload Page**
 
