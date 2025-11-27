@@ -173,47 +173,6 @@ def upload_page():
     return render_template("upload.html", message=message)
 
 
-def clean_and_save_books_csv():
-    """
-    Simple cleaning:
-    1. Read Book_Dataset_1.csv from data processing
-    2. Drop long text + URL columns
-    3. Rename columns
-    4. Save cleaned CSV to data collection
-    """
-
-    # Read raw CSV
-    raw_df = pd.read_csv(raw_csv_path, encoding="latin1", on_bad_lines="skip")
-
-    # Drop columns we do not need
-    cols_to_drop = ["Book_Description", "Image_Link"]
-    raw_df = raw_df.drop(columns=[c for c in cols_to_drop if c in raw_df.columns])
-
-  
-    # Rename columns
-    rename_map = {
-        "Unnamed: 0": "BookID",
-        "Title": "Title",
-        "Category": "Category",
-        "Price": "Price",
-        "Price_After_Tax": "PriceTax",
-        "Tax_amount": "Tax",
-        "Avilability": "Stock",
-        "Number_of_reviews": "Reviews",
-        "Stars": "Rating"
-    }
-    raw_df = raw_df.rename(columns=rename_map)
-
-    # Reorder columns
-    final_cols = ["BookID", "Title", "Category", "Price", "PriceTax", "Tax", "Stock", "Reviews", "Rating"]
-    raw_df = raw_df[final_cols]
-
-    # Save cleaned CSV
-    raw_df.to_csv(clean_csv_path, index=False, encoding="utf-8")
-
-    return "Cleaning completed. Clean CSV saved!"
-
-
 # ========================
 #       ADD NEW BOOK
 # ========================
@@ -227,25 +186,25 @@ def add_page():
     if error:
         return render_template("add.html", message=None, error=error)
 
-    # 1. If this is a POST, insert a new record
     if request.method == "POST":
-        BookID = request.form.get("BookID")
-        Title = request.form.get("Title")
-        Category = request.form.get("Category")
-        Price = request.form.get("Price")
-        Price_After_Tax = request.form.get("PriceTax")
-        Tax_amount = request.form.get("Tax")
-        Avilability = request.form.get("Stock")   # same spelling as DB
-        Number_of_reviews = request.form.get("Reviews")
-        Stars = request.form.get("Rating")
-
-        # Simple validation
-        if not BookID or not Title:
-            conn.close()
-            error = "Book ID and Title are required."
-            return render_template("add.html", message=None, error=error)
-
         try:
+            # Read form values
+            BookID = (request.form.get("BookID") or "").strip()
+            Title = (request.form.get("Title") or "").strip()
+            Category = (request.form.get("Category") or "").strip()
+
+            Price = request.form.get("Price") or None
+            Price_After_Tax = request.form.get("PriceTax") or None
+            Tax_amount = request.form.get("Tax") or None
+            Stock = request.form.get("Stock") or None
+            Reviews = request.form.get("Reviews") or None
+            Rating = request.form.get("Rating") or None
+
+            # Simple validation
+            if not BookID or not Title:
+                raise ValueError("Book ID and Title are required.")
+
+            # Insert into the books table
             cur.execute(
                 """
                 INSERT INTO books (
@@ -256,25 +215,26 @@ def add_page():
                 """,
                 (
                     BookID, Title, Category, Price, Price_After_Tax,
-                    Tax_amount, Avilability, Number_of_reviews, Stars
+                    Tax_amount, Stock, Reviews, Rating
                 )
             )
 
             conn.commit()
-            conn.close()
-
             message = f"Book '{Title}' added successfully."
-
             return render_template("add.html", message=message, error=None)
 
         except Exception as e:
-            conn.close()
+            conn.rollback()
             error = f"Error inserting record: {e}"
             return render_template("add.html", message=None, error=error)
 
-    # 2. GET request → show empty form
+        finally:
+            conn.close()
+
+    # GET request → just show empty form
     conn.close()
     return render_template("add.html", message=None, error=None)
+
 
 
 # ========================
@@ -341,11 +301,26 @@ def hist_stats():
                                    error=None,
                                    message="No data available to plot.")
 
+        # REAL CATEGORY COUNTS
         cat_counts = df["Category"].value_counts()
-        freq_of_counts = cat_counts.value_counts().sort_index()
 
-        fig, ax = plt.subplots(figsize=(12, 6))
-        ax.bar(freq_of_counts.index.astype(str), freq_of_counts.values, color="orange")
+        fig, ax = plt.subplots(figsize=(14, 7))
+
+        ax.bar(cat_counts.index, cat_counts.values, color="orange", label="Category Count")
+
+        # Title + labels
+        ax.set_title("Book Count per Category", fontsize=16)
+        ax.set_xlabel("Category", fontsize=14)
+        ax.set_ylabel("Number of Books", fontsize=14)
+        ax.legend()
+
+        # Rotate category names so they are readable
+        plt.xticks(rotation=45, ha="right", fontsize=12)
+
+        # Add labels above bars
+        for i, v in enumerate(cat_counts.values):
+            ax.text(i, v + 0.2, str(v), ha='center', fontsize=12)
+
         plt.tight_layout()
 
         plot_filename = "hist_stats.png"
@@ -362,6 +337,9 @@ def hist_stats():
                                plot_filename=None,
                                error=f"Error creating plot: {e}",
                                message=None)
+
+
+
 
 
 # -------- RUN --------
