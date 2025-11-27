@@ -14,10 +14,6 @@ This flowchart explains the full workflow of the Flask application, including fi
 
 ![Flowchart](static/images/FlowChart.png)
 
-
-
-
-
 #  **Key Features**
 
 ### **1. Upload System**
