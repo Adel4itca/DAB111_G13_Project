@@ -306,7 +306,10 @@ def hist_stats():
 
         fig, ax = plt.subplots(figsize=(14, 7))
 
-        ax.bar(cat_counts.index, cat_counts.values, color="orange", label="Category Count")
+        # ==== DIFFERENT COLOR FOR EACH BAR ====
+        colors = plt.cm.tab20(range(len(cat_counts)))
+
+        ax.bar(cat_counts.index, cat_counts.values, color=colors, label="Category Count")
 
         # Title + labels
         ax.set_title("Book Count per Category", fontsize=16)
@@ -314,7 +317,7 @@ def hist_stats():
         ax.set_ylabel("Number of Books", fontsize=14)
         ax.legend()
 
-        # Rotate category names so they are readable
+        # Rotate category names
         plt.xticks(rotation=45, ha="right", fontsize=12)
 
         # Add labels above bars
@@ -337,6 +340,7 @@ def hist_stats():
                                plot_filename=None,
                                error=f"Error creating plot: {e}",
                                message=None)
+
 
 
 
