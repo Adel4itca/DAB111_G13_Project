@@ -136,12 +136,6 @@ python -m venv venv
 venv\Scripts\activate
 ```
 
-**Mac/Linux**
-
-```bash
-source venv/bin/activate
-```
-
 ### **4. Install Dependencies**
 
 ```bash
@@ -167,7 +161,7 @@ Upload `.csv` → saves to SQLite
 
 ### **Data Page**
 
-View and search records
+View and search records By BookID or Title OR Category 
 
 ### **Add Page**
 
