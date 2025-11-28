@@ -191,7 +191,7 @@ Shows histogram of categories
 * Pandas
 * Matplotlib
 * HTML / CSS
-* Jinja2
+* 
 
 ---
 

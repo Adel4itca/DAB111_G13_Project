@@ -29,7 +29,6 @@ def check_database_and_table():
     Checks:
     - If the database file exists
     - If connection works
-    - If 'books' table exists
 
     Returns:
         (conn, cursor, error_message)
@@ -129,7 +128,7 @@ def upload_page():
             message = f"Error reading CSV: {e}"
             return render_template("upload.html", message=message)
 
-        conn = sqlite3.connect(data_folder)
+        conn = get_db_connection()
         df.to_sql("books", conn, if_exists="replace", index=False)
         conn.close()
 
@@ -239,7 +238,6 @@ def hist_stats():
             )
 
         try:
-            # Query category counts
             cur.execute("""
                 SELECT Category, COUNT(*) 
                 FROM books
@@ -257,15 +255,12 @@ def hist_stats():
                     message="No data available to plot."
                 )
 
-            # Prepare data
             categories = [row[0] for row in cat_results]
             counts = [row[1] for row in cat_results]
 
-            # Sort DESC
             sorted_pairs = sorted(zip(categories, counts), key=lambda x: x[1], reverse=True)
             categories, counts = zip(*sorted_pairs)
 
-            # Plot
             fig, ax = plt.subplots(figsize=(16, 6))
             colors = plt.cm.tab20(range(len(categories)))
 
@@ -311,6 +306,6 @@ def hist_stats():
                 message=None
             )
 
-# -------- RUN --------
+# Main
 if __name__ == "__main__":
     app.run(debug=True)
