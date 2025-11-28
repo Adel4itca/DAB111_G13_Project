@@ -4,6 +4,9 @@ import sqlite3
 import pandas as pd
 import matplotlib.pyplot as plt
 import io, base64
+import matplotlib
+matplotlib.use("Agg")  # must be before importing pyplot
+
 
 # -------- PATHS --------
 main_dir             = os.path.dirname(os.path.abspath(__file__))
