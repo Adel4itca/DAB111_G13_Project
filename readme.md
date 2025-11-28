@@ -75,11 +75,6 @@ Supports partial matching using SQL `LIKE`.
 * Created using Matplotlib
 * Auto-updates when the database changes
 
-### **6. Clean UI**
-
-* Navigation menu
-* Success & error messages
-* Responsive templates
 
 ---
 

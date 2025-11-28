@@ -3,41 +3,28 @@ import os
 import sqlite3
 import pandas as pd
 import matplotlib.pyplot as plt
+import io, base64
 
 # -------- PATHS --------
-main_dir = os.path.dirname(os.path.abspath(__file__))
+main_dir             = os.path.dirname(os.path.abspath(__file__))
+templates_page       = os.path.join(main_dir, "website", "templates")
+st_css_img_page      = os.path.join(main_dir, "static")
+data_folder          = os.path.join(main_dir, "database", "books.db")
 
-templates_page = os.path.join(main_dir, "website", "templates")
-st_css_img_page = os.path.join(main_dir, "static")
-data_folder = os.path.join(main_dir, "database", "books.db")
-
-
-# Make sure static folder exists (for saving plots)
-os.makedirs(st_css_img_page, exist_ok=True)
-
-#### clean Data###
-data_processing_path = os.path.join(main_dir, "data processing")
-os.makedirs(data_processing_path, exist_ok=True)
-
-data_collection_path = os.path.join(main_dir, "data collection")
-os.makedirs(data_collection_path, exist_ok=True)
-
-raw_csv_path = os.path.join(data_processing_path, "Book_Dataset_1.csv")
-clean_csv_path = os.path.join(data_collection_path, "cl_book_ds.csv")
-
-#####
 
 app = Flask(__name__, template_folder=templates_page, static_folder=st_css_img_page)
 
-
-
-# -------- DB CONNECTION --------
 def get_db_connection():
+
+    """
+    This function connects to the SQLite database and returns the connection.
+    """
     conn = sqlite3.connect(data_folder)
     conn.row_factory = sqlite3.Row
     return conn
 
 def check_database_and_table():
+    
     """
     Checks:
     - If the database file exists
@@ -48,36 +35,17 @@ def check_database_and_table():
         (conn, cursor, error_message)
         If error occurs: (None, None, "message")
     """
-
-    # 1. Database file must exist
     if not os.path.exists(data_folder):
         return None, None, "Database not found. Please upload a CSV file first."
-
     try:
         conn = get_db_connection()
         cur = conn.cursor()
     except Exception as e:
         return None, None, f"Database connection failed: {e}"
 
-    # 2. Check table exists
-    try:
-        cur.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='books'")
-        if cur.fetchone() is None:
-            conn.close()
-            return None, None, "Table 'books' does not exist. Upload a CSV file first."
-    except Exception as e:
-        conn.close()
-        return None, None, f"Error checking table: {e}"
-
-    # Everything OK
     return conn, cur, None
 
-## Clean Function
-
-
- #################################################################################33
-
-# -------- ROUTES --------
+#################################################################################33
 
 @app.route("/")
 def home():
@@ -108,18 +76,12 @@ def about():
     return render_template("about.html", dataset=dataset, variables=variables)
 
 
-# ========================
-#   DISPLAY BOOKS TABLE
-# ========================
 @app.route("/data")
 def data_page():
     search_query = request.args.get("search", "").strip()
-
     conn, cur, error = check_database_and_table()
     if error:
         return render_template("data.html", rows=[], columns=[], error=error)
-
-    # Run search or load all data
     try:
         if search_query:
             like_text = f"%{search_query}%"
@@ -135,53 +97,53 @@ def data_page():
 
         conn.close()
         return render_template("data.html", rows=rows, columns=columns)
-
     except Exception as e:
         conn.close()
         return render_template("data.html", rows=[], columns=[], error=f"Error loading data: {e}")
 
 
-# ========================
-#       UPLOAD CSV
-# ========================
 @app.route("/upload", methods=["GET", "POST"])
 def upload_page():
     message = ""
 
     if request.method == "POST":
+        limit = request.form.get("limit", "").strip()
+        if limit == "":
+            message = "Please enter how many records to upload."
+            return render_template("upload.html", message=message)
+        if not limit.isdigit():
+            message = "Record number must be a positive number."
+            return render_template("upload.html", message=message)
+        limit = int(limit)
+        if limit <= 1:
+            message = "Record number must be greater than 1."
+            return render_template("upload.html", message=message)
         file = request.files.get("file")
-
-        # No file selected
         if file is None or file.filename == "":
             message = "Please select a CSV file."
             return render_template("upload.html", message=message)
 
-        # Read CSV directly from memory (NO TEMP PATH)
         try:
-            df = pd.read_csv(file.stream, encoding="latin1", on_bad_lines='skip').head(500)
+            df = pd.read_csv(file.stream, encoding="latin1", on_bad_lines='skip').head(limit)
         except Exception as e:
-            message = f"Error reading CSV file: {e}"
+            message = f"Error reading CSV: {e}"
             return render_template("upload.html", message=message)
 
-        #  Save DataFrame to SQLite as "books"
-        conn = sqlite3.connect(data_folder)   # connect to your database file
+        conn = sqlite3.connect(data_folder)
         df.to_sql("books", conn, if_exists="replace", index=False)
         conn.close()
 
-        message = "CSV uploaded and saved into the 'books' table successfully."
+        message = f"{len(df)} records uploaded successfully!"
 
     return render_template("upload.html", message=message)
 
 
-# ========================
-#       ADD NEW BOOK
-# ========================
+
 @app.route("/add", methods=["GET", "POST"])
 def add_page():
     message = None
     error = None
 
-    # 0. Check database + table
     conn, cur, error = check_database_and_table()
     if error:
         return render_template("add.html", message=None, error=error)
@@ -189,22 +151,19 @@ def add_page():
     if request.method == "POST":
         try:
             # Read form values
-            BookID = (request.form.get("BookID") or "").strip()
-            Title = (request.form.get("Title") or "").strip()
-            Category = (request.form.get("Category") or "").strip()
-
-            Price = request.form.get("Price") or None
+            BookID          = (request.form.get("BookID") or "").strip()
+            Title           = (request.form.get("Title") or "").strip()
+            Category        = (request.form.get("Category") or "").strip()
+            Price           = request.form.get("Price") or None
             Price_After_Tax = request.form.get("PriceTax") or None
-            Tax_amount = request.form.get("Tax") or None
-            Stock = request.form.get("Stock") or None
-            Reviews = request.form.get("Reviews") or None
-            Rating = request.form.get("Rating") or None
+            Tax_amount      = request.form.get("Tax") or None
+            Stock           = request.form.get("Stock") or None
+            Reviews         = request.form.get("Reviews") or None
+            Rating          = request.form.get("Rating") or None
 
-            # Simple validation
             if not BookID or not Title:
                 raise ValueError("Book ID and Title are required.")
 
-            # Insert into the books table
             cur.execute(
                 """
                 INSERT INTO books (
@@ -231,27 +190,19 @@ def add_page():
         finally:
             conn.close()
 
-    # GET request → just show empty form
     conn.close()
     return render_template("add.html", message=None, error=None)
 
 
-
-# ========================
-#      DELETE BOOK
-# ========================
 @app.route("/delete", methods=["GET", "POST"])
 def delete_page():
     message = None
     error = None
 
-    # 0. Check database file + 'books' table (same as hist_stats)
     conn, cur, error = check_database_and_table()
     if error:
-        # No need to keep connection if there was an error
         return render_template("delete.html", message=None, error=error)
 
-    # 1. If this is a POST, try to delete a book
     if request.method == "POST":
         BookID = request.form.get("BookID")
 
@@ -273,78 +224,92 @@ def delete_page():
 
         return render_template("delete.html", message=message, error=None)
 
-    # 2. GET request → just show the form (no message)
     conn.close()
     return render_template("delete.html", message=None, error=None)
 
-
-
-# ========================
-#   HISTOGRAM / STATS
-# ========================
 @app.route("/hist_stats")
 def hist_stats():
-    conn, cur, error = check_database_and_table()
-    if error:
-        return render_template("hist_stats.html",
-                               plot_filename=None,
-                               error=error,
-                               message=None)
+        conn, cur, error = check_database_and_table()
+        if error:
+            return render_template(
+                "hist_stats.html",
+                plot_cat_url=None,
+                error=error,
+                message=None
+            )
 
-    try:
-        df = pd.read_sql_query("SELECT Category FROM books", conn)
-        conn.close()
+        try:
+            # Query category counts
+            cur.execute("""
+                SELECT Category, COUNT(*) 
+                FROM books
+                GROUP BY Category
+                ORDER BY COUNT(*) DESC
+            """)
+            cat_results = cur.fetchall()
+            conn.close()
 
-        if df.empty:
-            return render_template("hist_stats.html",
-                                   plot_filename=None,
-                                   error=None,
-                                   message="No data available to plot.")
+            if not cat_results:
+                return render_template(
+                    "hist_stats.html",
+                    plot_cat_url=None,
+                    error=None,
+                    message="No data available to plot."
+                )
 
-        # REAL CATEGORY COUNTS
-        cat_counts = df["Category"].value_counts()
+            # Prepare data
+            categories = [row[0] for row in cat_results]
+            counts = [row[1] for row in cat_results]
 
-        fig, ax = plt.subplots(figsize=(14, 7))
+            # Sort DESC
+            sorted_pairs = sorted(zip(categories, counts), key=lambda x: x[1], reverse=True)
+            categories, counts = zip(*sorted_pairs)
 
-        # ==== DIFFERENT COLOR FOR EACH BAR ====
-        colors = plt.cm.tab20(range(len(cat_counts)))
+            # Plot
+            fig, ax = plt.subplots(figsize=(16, 6))
+            colors = plt.cm.tab20(range(len(categories)))
 
-        ax.bar(cat_counts.index, cat_counts.values, color=colors, label="Category Count")
+            bars = ax.bar(categories, counts, color=colors)
 
-        # Title + labels
-        ax.set_title("Book Count per Category", fontsize=16)
-        ax.set_xlabel("Category", fontsize=14)
-        ax.set_ylabel("Number of Books", fontsize=14)
-        ax.legend()
+            ax.set_title("Book Count per Category")
+            ax.set_xlabel("Category")
+            ax.set_ylabel("Number of Books")
+            plt.xticks(rotation=45, ha="right")
 
-        # Rotate category names
-        plt.xticks(rotation=45, ha="right", fontsize=12)
+            # Add values above bars
+            for bar, value in zip(bars, counts):
+                ax.text(
+                    bar.get_x() + bar.get_width() / 2,
+                    value + 0.5,
+                    str(value),
+                    ha='center',
+                    va='bottom',
+                    fontsize=10,
+                    fontweight='bold'
+                )
 
-        # Add labels above bars
-        for i, v in enumerate(cat_counts.values):
-            ax.text(i, v + 0.2, str(v), ha='center', fontsize=12)
+            # Convert to Base64
+            img = io.BytesIO()
+            fig.savefig(img, format="png", bbox_inches="tight")
+            img.seek(0)
+            plt.close(fig)
 
-        plt.tight_layout()
+            plot_cat_url = base64.b64encode(img.getvalue()).decode("utf-8")
 
-        plot_filename = "hist_stats.png"
-        output_path = os.path.join(st_css_img_page, plot_filename)
-        fig.savefig(output_path)
+            return render_template(
+                "hist_stats.html",
+                plot_cat_url=plot_cat_url,
+                error=None,
+                message=None
+            )
 
-        return render_template("hist_stats.html",
-                               plot_filename=plot_filename,
-                               error=None,
-                               message=None)
-
-    except Exception as e:
-        return render_template("hist_stats.html",
-                               plot_filename=None,
-                               error=f"Error creating plot: {e}",
-                               message=None)
-
-
-
-
-
+        except Exception as e:
+            return render_template(
+                "hist_stats.html",
+                plot_cat_url=None,
+                error=f"Error creating plot: {e}",
+                message=None
+            )
 
 # -------- RUN --------
 if __name__ == "__main__":

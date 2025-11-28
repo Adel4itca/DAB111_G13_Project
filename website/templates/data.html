@@ -29,7 +29,6 @@
     <!-- Show table only if data exists -->
     {% if rows %}
 
-        <!-- Scrollable table wrapper -->
         <div class="table-wrapper">
             <table class="books-table">
                 <thead>
@@ -44,40 +43,7 @@
                     {% for row in rows %}
                     <tr>
                         {% for col in columns %}
-
-                            {# Special display for Book_Description #}
-                            {% if col == 'Book_Description' %}
-                                <td class="book-description">
-                                    <details class="desc-details">
-                                        <summary>View</summary>
-                                        <div class="desc-text">
-                                            {{ row[col] }}
-                                        </div>
-                                    </details>
-                                </td>
-
-                            {# Special display for Image_Link #}
-                            {% elif col == 'Image_Link' %}
-                                <td class="image-link">
-                                    <details class="desc-details">
-                                        <summary>View</summary>
-                                        <div class="desc-text">
-                                            {% if row[col] %}
-                                                <a href="{{ row[col] }}" target="_blank">
-                                                    {{ row[col] }}
-                                                </a>
-                                            {% else %}
-                                                No image link
-                                            {% endif %}
-                                        </div>
-                                    </details>
-                                </td>
-
-                            {# Normal columns #}
-                            {% else %}
-                                <td>{{ row[col] }}</td>
-                            {% endif %}
-
+                            <td>{{ row[col] }}</td>
                         {% endfor %}
                     </tr>
                     {% endfor %}

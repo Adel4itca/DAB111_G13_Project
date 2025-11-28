@@ -9,10 +9,16 @@
 <div class="container">
 
     <form action="/upload" method="POST" enctype="multipart/form-data">
-        <label for="file">Select a CSV file:</label><br><br>
 
+        <!-- Select CSV File -->
+        <label for="file">Select a CSV file:</label><br><br>
         <input type="file" name="file" id="file" accept=".csv"><br><br>
 
+        <!-- Number of Records -->
+        <label for="limit">Number of records to upload:</label><br>
+        <input type="text" name="limit" id="limit" placeholder="Enter a number > 1"><br><br>
+
+        <!-- Upload Button -->
         <button type="submit">Upload</button>
     </form>
 

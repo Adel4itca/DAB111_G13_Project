@@ -1,33 +1,23 @@
 {% extends "base.html" %}
-
-{% block title %}Category Histogram{% endblock %}
-
+{% block title %}Book Statistics{% endblock %}
 {% block content %}
-<h2>Category Histogram</h2>
+
+<h2>Book Count per Category</h2>
 
 <div class="container">
 
-    <!-- Red error message (same as data.html) -->
     {% if error %}
-        <div class="message-box error">
-            {{ error }}
-        </div>
+        <div class="message-box error">{{ error }}</div>
     {% endif %}
 
-    <!-- Blue general message -->
     {% if message %}
-        <div class="message-box">
-            {{ message }}
-        </div>
+        <div class="message-box info">{{ message }}</div>
     {% endif %}
 
-    <!-- Show plot -->
-    {% if plot_filename %}
-        <img src="{{ url_for('static', filename=plot_filename) }}"
-             alt="Histogram" style="max-width: 80%; margin-top: 20px;">
-    {% elif not error and not message %}
-        <p>No plot available.</p>
+    {% if plot_cat_url %}
+        <img src="data:image/png;base64,{{ plot_cat_url }}" class="plot-img">
     {% endif %}
 
 </div>
+
 {% endblock %}
