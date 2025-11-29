@@ -127,16 +127,16 @@ cd DAB111_G13_Project
 
 ### **2. Create Virtual Environment**
 
+
 ```bash
 python -m venv venv
 ```
 
 
-If you found any problems related to 
-venv\Scripts\activate
-~~~~~~~~~~~~~~~~~~~~~
-  + C ategoryInfo          : SecurityError: (:) [], PSSecurityException
-    + FullyQualifiedErrorId : UnauthorizedAccess
+If you found any problems related to venv\Scripts\activate
+C ategoryInfo          : SecurityError: (:) [], PSSecurityException
+FullyQualifiedErrorId : UnauthorizedAccess
+
 
 ``` bash
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
