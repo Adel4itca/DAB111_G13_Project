@@ -131,6 +131,19 @@ cd DAB111_G13_Project
 python -m venv venv
 ```
 
+
+If you found any problems related to 
+venv\Scripts\activate
+~~~~~~~~~~~~~~~~~~~~~
+  + C ategoryInfo          : SecurityError: (:) [], PSSecurityException
+    + FullyQualifiedErrorId : UnauthorizedAccess
+
+``` bash
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+```
+
+
+
 ### **3. Activate Environment**
 
 **Windows**
