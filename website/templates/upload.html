@@ -1,5 +1,10 @@
 {% extends "base.html" %}
-
+<!-- This page allows the user to upload a CSV file and select how many rows 
+should be inserted into the SQLite database. The uploaded data replaces 
+the existing 'books' table. Validation checks ensure the user provides:
+1. A valid CSV file
+2. A numeric record limit greater than 1
+-->
 {% block title %}Upload CSV{% endblock %}
 
 {% block content %}

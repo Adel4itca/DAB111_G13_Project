@@ -1,5 +1,10 @@
 {% extends "base.html" %}
-
+<!--
+This page provides a form for adding a new book record into the SQLite database.
+Users enter BookID, Title, Category, Price details, Reviews, and Rating.
+Server-side validation checks if the BookID already exists before inserting.
+Success or error messages are displayed after form submission.
+-->
 {% block title %}Add Book{% endblock %}
 
 {% block content %}

@@ -1,5 +1,11 @@
 {% extends "base.html" %}
-
+<!--
+This page displays book records from the database.
+- Supports searching by Title, Category, or BookID (via GET /data?search=).
+- Shows error messages if database cannot be accessed.
+- Renders a dynamic table with column headers and rows from the SQL query.
+- If no data exists, displays "No data found."
+-->
 {% block title %}Books Data{% endblock %}
 
 {% block content %}

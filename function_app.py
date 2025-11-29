@@ -7,7 +7,6 @@ import matplotlib.pyplot as plt
 import matplotlib
 import pandas as pd
 import sqlite3
-import os
 matplotlib.use("Agg")  # must be before importing pyplot
 from flask import render_template, request
 
@@ -15,7 +14,8 @@ from flask import render_template, request
 
 def display_about(app):
 
-    ''' This function to display the Data set information in about pages and also display readme.md'''
+    ''' This function displays the dataset information and all variable descriptions on the About page,
+        and also display readme.md'''
 
     @app.route("/about")
 
@@ -43,7 +43,17 @@ def display_about(app):
 
 def display_data(app, check_database_avl):
 
-    ''' This function to display the Data from DB and Search by  Title ,  Category and BookID '''
+    ''' This function to display the Data from DB and Search by  Title ,  Category and BookID:
+      User opens the page     -	Shows all books or only matching books
+      Get search text         -	If user types “python”, it will search for “python” in the database
+      Connect to database     - Makes sure the database exists and can be opened
+      Decide which SQL to run -	If empty → show everything with SELECT * FROM books
+      Run SQL query	          - Gets rows of book data from the table
+      Fetch results	          - Reads all matching records
+      Get column names	      - Needed to display table headers (Title, Category, Price…)
+      Show data on webpage    - Sends data to HTML so user can see it
+       Error handling	      - Prevents app crash and helps user know what went wrong
+    '''
 
     @app.route("/data")
     
@@ -73,7 +83,16 @@ def display_data(app, check_database_avl):
 
 def upload_data(app,data_folder):
 
-    ''' This function upload the Data from CVS file to DB also create DB if not exist '''
+    ''' This function upload the Data from CVS file to DB also create DB if not exist
+    User opens /upload page
+    User chooses a CSV file
+    User enters how many rows to upload
+    The file is read using pandas
+    Only first N rows are taken
+    A new SQLite database (books table) is created automatically
+    Data is inserted
+    Success message is shown 
+    '''
 
     @app.route("/upload", methods=["GET", "POST"])
     def upload_page():
@@ -114,7 +133,19 @@ def upload_data(app,data_folder):
 
 def add_new_records(app, check_database_avl):
 
-    ''' This function Add new record bfore that check if record avilabe  display message the record found Bfore '''
+    ''' This function adds a new book to the database, but first checks if the BookID already exists to prevent duplicate
+        User opens the Add page	        -	Shows an empty form where the user can enter book information.
+        Connect to the database	        -	Makes sure the database exists and can be opened before adding anything.
+        Check if form was submitted	    -	Detects if the user clicked the “Add Book” button.
+        Read form values	            -	Collects BookID, Title, Category, Price, Stock, Rating, etc. from the form.
+        Validate required fields	    -	Ensures BookID and Title are not empty because they are required.
+        Check if BookID already exists	-	Looks in the database; if the ID exists, shows an error message.
+        Insert new book	                -	Adds the book into the database using an SQL INSERT statement.
+        Save changes	                -	Commits the insert so the new book is stored permanently.
+        Show success message	        -	Tells the user the book was added successfully.
+        Handle any errors	            -	If something goes wrong, cancels the insert and shows an error message.
+        Close the database	            -	Safely closes the connection after finishing the work.
+    '''
 
     @app.route("/add", methods=["GET", "POST"])
     def add_page():
@@ -179,7 +210,17 @@ def add_new_records(app, check_database_avl):
 
 
 def del_records(app, check_database_avl):
-    ''' This function Delete the record from databasee '''
+    ''' This function deletes a book by BookID and tells the user whether the record existed or not.
+    User opens the delete page	        -	The user visits /delete to delete a book.
+    Connect to the database	            -	The function checks if the database is available.
+    User submits BookID in the form	    -	User types a BookID they want to delete.
+    Validate BookID	                    -	If the BookID is empty, show an error message.
+    Delete the record	                -	The system tries to delete the book with that BookID.
+    Check if deletion happened	        -	If rowcount > 0, deletion was successful.
+    Show success or not-found message	-	Tell the user if the book was deleted or if the ID doesn’t exist.
+    Close the database	                -	The database connection is safely closed.
+    Reload delete page	                -	Page refreshes to allow deleting another record.
+    '''
 
     @app.route("/delete", methods=["GET", "POST"])
     def delete_page():
@@ -217,7 +258,14 @@ def del_records(app, check_database_avl):
 
 def plot_hist_stats(app, check_database_and_table):
     
-    """    This function plot histogram    """
+    """This function reads category counts from the database, creates a bar chart, converts it to an image, 
+    and displays it on the histogram page.
+    Connect to the database	-	Opens the database and checks if the books table exists.
+    Read category counts	-	Runs a SQL query to count how many books are in each category.
+    Prepare the data	    -	Creates two lists: categories and their book counts, sorted from biggest to smallest.
+    Create the bar chart	-	Draws a colorful bar chart showing how many books are in each category.
+    Convert the chart and send to HTML	-	Saves the chart as Base64 and displays it on the webpage (hist_stats.html).
+    """
 
     @app.route("/hist_stats")
     def hist_stats():
