@@ -1,9 +1,7 @@
 import os
-import sqlite3
-
 from flask import Flask, render_template, request
 from function_app import plot_hist_stats,add_new_records,del_records,upload_data,display_data,display_about
-
+import sqlite3
 
 # -------- PATHS --------
 main_dir             = os.path.dirname(os.path.abspath(__file__))
