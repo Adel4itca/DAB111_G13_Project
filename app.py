@@ -22,7 +22,7 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
-def check_database_and_table():
+def check_database_avl():
     """
     Checks:
     - If the database file exists
@@ -50,11 +50,11 @@ def home():
 
 
 display_about(app)
-upload_data(app, check_database_and_table)
-display_data(app, check_database_and_table)
-add_new_records(app, check_database_and_table)
-del_records(app, check_database_and_table)
-plot_hist_stats(app, check_database_and_table)
+upload_data(app, data_folder)
+display_data(app, check_database_avl)
+add_new_records(app, check_database_avl)
+del_records(app, check_database_avl)
+plot_hist_stats(app, check_database_avl)
 
 
 # Main

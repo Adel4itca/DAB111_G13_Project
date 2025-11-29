@@ -1,19 +1,24 @@
 
-# Application Function
-# function_app.py
+# Application Function function_app.py
 
 import io
 import base64
 import matplotlib.pyplot as plt
 import matplotlib
 import pandas as pd
-
+import sqlite3
+import os
 matplotlib.use("Agg")  # must be before importing pyplot
 from flask import render_template, request
 
 
+
 def display_about(app):
+
+    ''' This function to display the Data set information in about pages and also display readme.md'''
+
     @app.route("/about")
+
     def about():
         dataset = {
             "name": "Book Dataset",
@@ -36,12 +41,15 @@ def display_about(app):
 
 
 
-def display_data(app, check_database_and_table):
+def display_data(app, check_database_avl):
+
+    ''' This function to display the Data from DB and Search by  Title ,  Category and BookID '''
 
     @app.route("/data")
+    
     def data_page():
         search_query = request.args.get("search", "").strip()
-        conn, cur, error = check_database_and_table()
+        conn, cur, error = check_database_avl()
         if error:
             return render_template("data.html", rows=[], columns=[], error=error)
         try:
@@ -63,7 +71,10 @@ def display_data(app, check_database_and_table):
             conn.close()
             return render_template("data.html", rows=[], columns=[], error=f"Error loading data: {e}")
 
-def upload_data(app, check_database_and_table):
+def upload_data(app,data_folder):
+
+    ''' This function upload the Data from CVS file to DB also create DB if not exist '''
+
     @app.route("/upload", methods=["GET", "POST"])
     def upload_page():
         message = ""
@@ -91,46 +102,54 @@ def upload_data(app, check_database_and_table):
                 message = f"Error reading CSV: {e}"
                 return render_template("upload.html", message=message)
 
-            conn, cur, error = check_database_and_table()
-            
-            if not error:
-                return render_template("upload.html", message=None, error=error)
-                
-            df.to_sql("books", conn, if_exists="replace", index=False)
-            conn.close()
-
-            message = f"{len(df)} records uploaded successfully!"
+            try:
+               conn = sqlite3.connect(data_folder)
+               df.to_sql("books", conn, if_exists="replace", index=False)
+               conn.close()
+               message = f"{len(df)} records uploaded successfully!"
+            except Exception as e:
+               error = f"Error writing to database: {e}"
 
         return render_template("upload.html", message=message)
 
-def add_new_records(app, check_database_and_table):
-        
-        @app.route("/add", methods=["GET", "POST"])
-        def add_page():
-            message = None
-            error = None
+def add_new_records(app, check_database_avl):
 
-            conn, cur, error = check_database_and_table()
-            if error:
-                return render_template("add.html", message=None, error=error)
+    ''' This function Add new record bfore that check if record avilabe  display message the record found Bfore '''
 
-            if request.method == "POST":
-                try:
-                    # Read form values
-                    BookID          = (request.form.get("BookID") or "").strip()
-                    Title           = (request.form.get("Title") or "").strip()
-                    Category        = (request.form.get("Category") or "").strip()
-                    Price           = request.form.get("Price") or None
-                    Price_After_Tax = request.form.get("PriceTax") or None
-                    Tax_amount      = request.form.get("Tax") or None
-                    Stock           = request.form.get("Stock") or None
-                    Reviews         = request.form.get("Reviews") or None
-                    Rating          = request.form.get("Rating") or None
+    @app.route("/add", methods=["GET", "POST"])
+    def add_page():
+        message = None
+        error = None
 
-                    if not BookID or not Title:
-                        raise ValueError("Book ID and Title are required.")
+        conn, cur, error = check_database_avl()
+        if error:
+            return render_template("add.html", message=None, error=error)
 
-                    cur.execute(
+        if request.method == "POST":
+            try:
+                # Read form values
+                BookID          = (request.form.get("BookID") or "").strip()
+                Title           = (request.form.get("Title") or "").strip()
+                Category        = (request.form.get("Category") or "").strip()
+                Price           = request.form.get("Price") or None
+                Price_After_Tax = request.form.get("PriceTax") or None
+                Tax_amount      = request.form.get("Tax") or None
+                Stock           = request.form.get("Stock") or None
+                Reviews         = request.form.get("Reviews") or None
+                Rating          = request.form.get("Rating") or None
+
+                if not BookID or not Title:
+                    raise ValueError("Book ID and Title are required.")
+                
+                cur.execute("SELECT BookID FROM books WHERE BookID = ?", (BookID,))
+                existing = cur.fetchone()
+
+                if existing:
+                    # Book ID already exists
+                    error = f"Book ID '{BookID}' already exists. Please use a different ID."
+                    return render_template("add.html", message=None, error=error)
+
+                cur.execute(
                         """
                         INSERT INTO books (
                             BookID, Title, Category, Price, PriceTax,
@@ -144,29 +163,30 @@ def add_new_records(app, check_database_and_table):
                         )
                     )
 
-                    conn.commit()
-                    message = f"Book '{Title}' added successfully."
-                    return render_template("add.html", message=message, error=None)
-
-                except Exception as e:
+                conn.commit()
+                message = f"Book '{Title}' added successfully."
+                return render_template("add.html", message=message, error=None)
+            except Exception as e:
                     conn.rollback()
                     error = f"Error inserting record: {e}"
                     return render_template("add.html", message=None, error=error)
 
-                finally:
+            finally:
                     conn.close()
 
-            conn.close()
-            return render_template("add.html", message=None, error=None)
+        conn.close()
+        return render_template("add.html", message=None, error=None)
 
 
-def del_records(app, check_database_and_table):
-        @app.route("/delete", methods=["GET", "POST"])
-        def delete_page():
+def del_records(app, check_database_avl):
+    ''' This function Delete the record from databasee '''
+
+    @app.route("/delete", methods=["GET", "POST"])
+    def delete_page():
             message = None
             error = None
 
-            conn, cur, error = check_database_and_table()
+            conn, cur, error = check_database_avl()
             if error:
                 return render_template("delete.html", message=None, error=error)
 
@@ -196,10 +216,8 @@ def del_records(app, check_database_and_table):
 
 
 def plot_hist_stats(app, check_database_and_table):
-    """
-    Attach the /hist_stats route to the given app.
-    We pass check_database_and_table from app.py to avoid circular imports.
-    """
+    
+    """    This function plot histogram    """
 
     @app.route("/hist_stats")
     def hist_stats():
