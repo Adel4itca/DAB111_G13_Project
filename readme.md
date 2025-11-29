@@ -133,16 +133,6 @@ python -m venv venv
 ```
 
 
-If you found any problems related to venv\Scripts\activate
-C ategoryInfo          : SecurityError: (:) [], PSSecurityException
-FullyQualifiedErrorId : UnauthorizedAccess
-
-
-```bash
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-```
-
-
 
 ### **3. Activate Environment**
 
@@ -150,6 +140,16 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 
 ```bash
 venv\Scripts\activate
+```
+
+If you found any problems related to venv\Scripts\activate
+
+CategoryInfo          : SecurityError: (:) [], PSSecurityException
+FullyQualifiedErrorId : UnauthorizedAccess
+
+
+```bash
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 ```
 
 ### **4. Install Dependencies**
