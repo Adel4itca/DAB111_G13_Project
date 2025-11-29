@@ -120,6 +120,8 @@ DAB111_G13_Project/
 
 ```bash
 git clone https://github.com/Adel4itca/DAB111_G13_Project.git
+Or
+Down Load The ZIP file and exctarcted on folder DAB111_G13_Project
 cd DAB111_G13_Project
 ```
 
