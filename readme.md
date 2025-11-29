@@ -63,7 +63,7 @@ Search by:
 
 Supports partial matching using SQL `LIKE`.
 
-### **4. CRUD Operations**
+### **4. Applicatin function**
 
 * Add new book entries
 * Delete books by BookID
