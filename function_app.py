@@ -92,7 +92,8 @@ def upload_data(app, check_database_and_table):
                 return render_template("upload.html", message=message)
 
             conn, cur, error = check_database_and_table()
-            if error:
+            
+            if not error:
                 return render_template("upload.html", message=None, error=error)
                 
             df.to_sql("books", conn, if_exists="replace", index=False)
