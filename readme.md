@@ -138,7 +138,7 @@ C ategoryInfo          : SecurityError: (:) [], PSSecurityException
 FullyQualifiedErrorId : UnauthorizedAccess
 
 
-``` bash
+```bash
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 ```
 
