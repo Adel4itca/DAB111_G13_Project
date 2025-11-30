@@ -1,105 +1,107 @@
 @echo off
-title DAB111_G13_Project - Auto Install & Run
+:: =========================================================
+::  AUTO-INSTALL OR RUN FLASK APP
+:: =========================================================
 
+:: ---- FORCE ADMIN MODE ----
+>nul 2>&1 "%SystemRoot%\system32\cacls.exe" "%SystemRoot%\system32\config\system"
+if '%errorlevel%' NEQ '0' (
+    echo Requesting administrative privileges...
+    powershell -Command "Start-Process '%~f0' -Verb RunAs"
+    exit /b
+)
+
+title DAB111_G13_Project - Auto Install & Run
 echo ===============================================
 echo      Auto Install & Run Flask Application
 echo ===============================================
 echo.
 
-:: --- Ask user where to install the project ---
-set /p target_path=Enter the FULL path where you want to install the app: 
+:: ---------------------------------------------
+:: 0) CHECK / INSTALL PYTHON
+:: ---------------------------------------------
+python --version >nul 2>&1
+if %errorlevel% neq 0 (
+    echo Python NOT found. Downloading Python installer...
+    powershell -Command "Invoke-WebRequest -Uri https://www.python.org/ftp/python/3.12.3/python-3.12.3-amd64.exe -OutFile python_installer.exe"
 
-echo.
-:: --- Ask user for the folder name they want ---
-set /p folder_name=Enter a NAME for the project folder (no spaces): 
+    if not exist python_installer.exe (
+        echo [ERROR] Failed to download Python installer.
+        pause
+        exit /b
+    )
 
-echo.
-echo Installing into:
-echo   %target_path%\%folder_name%
-echo.
-
-:: Create parent folder if not exists
-if not exist "%target_path%" (
-    echo Parent folder does NOT exist. Creating it...
-    mkdir "%target_path%"
+    echo Installing Python silently...
+    python_installer.exe /quiet InstallAllUsers=1 PrependPath=1 Include_pip=1 SimpleInstall=1 TargetDir="C:\Python312"
+    timeout /t 15 >nul
 )
 
-:: Go to the target directory
-cd /d "%target_path%"
-
-:: ---------------------------------------------
-:: 1) Create chosen folder
-:: ---------------------------------------------
-if not exist "%folder_name%" (
-    mkdir "%folder_name%"
-) else (
-    echo [WARNING] Folder already exists. Files may be overwritten.
-)
-
-cd "%folder_name%"
-
-:: ---------------------------------------------
-:: 2) Download ZIP from GitHub
-:: ---------------------------------------------
-echo Downloading project ZIP from GitHub...
-powershell -Command "Invoke-WebRequest -Uri https://github.com/Adel4itca/DAB111_G13_Project/archive/refs/heads/main.zip -OutFile project.zip"
-
-if not exist project.zip (
-    echo [ERROR] Could not download the GitHub ZIP file.
+python --version >nul 2>&1
+if %errorlevel% neq 0 (
+    echo [ERROR] Python installation FAILED.
     pause
     exit /b
 )
 
-echo Extracting ZIP...
-powershell -Command "Expand-Archive project.zip -DestinationPath . -Force"
-del project.zip
+echo Python is ready.
+echo.
 
-:: The downloaded folder is 'DAB111_G13_Project-main'
-if exist DAB111_G13_Project-main (
-    echo Renaming extracted folder...
-    move DAB111_G13_Project-main src
+:: ---------------------------------------------
+:: Ask for project location
+:: ---------------------------------------------
+set /p target_path=Enter FULL path to the project folder: 
+set /p folder_name=Enter project folder name (no spaces): 
+
+set full_path=%target_path%\%folder_name%
+mkdir "%full_path%" 2>nul
+
+:: ---------------------------------------------
+:: CHECK if project already exists
+:: ---------------------------------------------
+if exist "%full_path%\src\app.py" (
+    echo Project already exists. Running it...
+    cd /d "%full_path%\src"
 ) else (
-    echo [ERROR] Extracted folder not found.
-    pause
-    exit /b
-)
+    echo Downloading and installing project...
+    cd /d "%full_path%"
+    powershell -Command "Invoke-WebRequest -Uri https://github.com/Adel4itca/DAB111_G13_Project/archive/refs/heads/main.zip -OutFile project.zip"
+    powershell -Command "Expand-Archive project.zip -DestinationPath . -Force"
+    del project.zip
+    ren DAB111_G13_Project-main src
+    cd src
 
-cd src
-
-:: ---------------------------------------------
-:: 3) Setup virtual environment
-:: ---------------------------------------------
-echo Checking for venv...
-
-if not exist venv (
-    echo Creating new virtual environment...
+    :: ---------------------------------------------
+    :: Create and activate venv
+    :: ---------------------------------------------
+    echo Creating virtual environment...
     python -m venv venv
-) else (
-    echo Virtual environment already exists.
-)
+    call venv\Scripts\activate.bat
 
-echo Activating virtual environment...
-call venv\Scripts\activate
-
-:: ---------------------------------------------
-:: 4) Install dependencies
-:: ---------------------------------------------
-if exist requirements.txt (
-    echo Installing dependencies...
-    pip install --upgrade pip
-    pip install -r requirements.txt
-) else (
-    echo [WARNING] No requirements.txt found.
+    echo Installing requirements...
+    python -m pip install -r requirements.txt
 )
 
 :: ---------------------------------------------
-:: 5) Run Flask application
+:: Create desktop shortcut (if not exist)
+:: ---------------------------------------------
+set SHORTCUT=%USERPROFILE%\Desktop\DBA111.url
+if not exist "%SHORTCUT%" (
+    echo Creating desktop shortcut to http://127.0.0.1:5000 ...
+    echo [InternetShortcut] > "%SHORTCUT%"
+    echo URL=http://127.0.0.1:5000 >> "%SHORTCUT%"
+    echo IconIndex=0 >> "%SHORTCUT%"
+    echo IconFile=%SystemRoot%\system32\shell32.dll >> "%SHORTCUT%"
+    echo Shortcut created!
+)
+
+:: ---------------------------------------------
+:: Run Flask app
 :: ---------------------------------------------
 echo Starting Flask app...
-python app.py
+call venv\Scripts\activate.bat
+start "" python app.py
 
-echo.
-echo Application is running at:
-echo     http://127.0.0.1:5000
-echo.
+echo Opening browser...
+start "" http://127.0.0.1:5000
+
 pause

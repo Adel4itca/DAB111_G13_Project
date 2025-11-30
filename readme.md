@@ -114,9 +114,31 @@ DAB111_G13_Project/
 
 ---
 
-#  **Installation & Setup**
+#  **Installation & Setup Guide**
+   **The project can be installed in two ways:**
 
-### **1. Clone Repo**
+### Option 1 — Auto Installation (Recommended) 
+1. Download the Auto-Setup .BAT File
+Click below to download the auto-setup file:
+ **[Download auto_setup.bat](https://raw.githubusercontent.com/Adel4itca/DAB111_G13_Project/main/auto_setup.bat)**
+(Right-click → “Save link as…” and save to your computer)
+
+2. Run the Installer
+Double-click the file:
+
+```bash
+auto_setup.bat
+```
+
+The automatic installer will:
+Ask you where to install the application
+Ask you for a project folder name
+Automatically download the latest project from GitHub
+Create a virtual environment
+Install all required packages from requirements.txt
+Automatically run app.py
+
+### Option 2 — Manual Installation Clone Repo**
 
 ```bash
 git clone https://github.com/Adel4itca/DAB111_G13_Project.git
