@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+<!-- This page displays the histogram bar chart for book counts per category using a Base64 plot generated in plot_hist_stats() -->
+
+{% block title %}Book Statistics{% endblock %}
+{% block content %}
+
+<h2>Book Count per Category</h2>
+
+<div class="container">
+
+    {% if error %}
+        <div class="message-box error">{{ error }}</div>
+    {% endif %}
+
+    {% if message %}
+        <div class="message-box info">{{ message }}</div>
+    {% endif %}
+
+    {% if plot_cat_url %}
+        <img src="data:image/png;base64,{{ plot_cat_url }}" class="plot-img">
+    {% endif %}
+
+</div>
+
+{% endblock %}

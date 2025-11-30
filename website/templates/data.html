@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+<!--
+This page displays book records from the database.
+- Supports searching by Title, Category, or BookID (via GET /data?search=).
+- Shows error messages if database cannot be accessed.
+- Renders a dynamic table with column headers and rows from the SQL query.
+- If no data exists, displays "No data found."
+-->
+{% block title %}Books Data{% endblock %}
+
+{% block content %}
+
+<h2>Books Data</h2>
+
+<div class="container">
+
+    <!-- Show error (if any) -->
+    {% if error %}
+        <div class="message-box error">
+            {{ error }}
+        </div>
+    {% endif %}
+
+    <!-- Search Bar -->
+    <form method="GET" action="/data" class="search-form">
+        <input type="text"
+               name="search"
+               placeholder="Search by Title or Category"
+               value="{{ request.args.get('search', '') }}">
+        <button type="submit">Search</button>
+    </form>
+
+    <br>
+
+    <!-- Show table only if data exists -->
+    {% if rows %}
+
+        <div class="table-wrapper">
+            <table class="books-table">
+                <thead>
+                    <tr>
+                        {% for col in columns %}
+                            <th>{{ col }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for row in rows %}
+                    <tr>
+                        {% for col in columns %}
+                            <td>{{ row[col] }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    {% else %}
+        {% if not error %}
+            <p>No data found.</p>
+        {% endif %}
+    {% endif %}
+
+</div>
+
+{% endblock %}

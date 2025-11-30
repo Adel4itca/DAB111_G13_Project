@@ -1,0 +1,289 @@
+/* ===== Global Styles ===== */
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 30px;
+    background-color: #f7f9fc;
+}
+
+/* prevent page itself from going wider than screen */
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+h1 {
+    color: #003399;
+}
+
+h2 {
+    color: #0055cc;
+}
+
+/* ===== Navigation Bar ===== */
+
+nav {
+    background-color: #e8eef7;
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 6px;
+}
+
+nav a {
+    margin-right: 18px;
+    font-weight: bold;
+    color: #003399;
+    text-decoration: none;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+.nav-red {
+    color: red !important;
+    font-weight: bold;
+}
+
+/* ===== Back Link ===== */
+
+.back-link {
+    margin-top: 20px;
+}
+
+.back-link a {
+    font-size: 14px;
+    text-decoration: none;
+    color: #0066cc;
+}
+
+.back-link a:hover {
+    text-decoration: underline;
+}
+
+/* ===== Container ===== */
+
+.container {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* ===== Generic Tables (small info tables etc.) ===== */
+
+.data-table,
+.info-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.data-table th,
+.data-table td,
+.info-table th,
+.info-table td {
+    border: 1px solid #cbd4e6;
+    padding: 8px 10px;
+    text-align: left;
+}
+
+.data-table th,
+.info-table th {
+    background-color: #e1e7f5;
+    font-weight: bold;
+}
+
+.data-table tr:nth-child(even) {
+    background-color: #f4f6fb;
+}
+
+/* ===== Forms (normal forms like upload, delete, etc.) ===== */
+
+.data-form,
+.upload-form {
+    margin-top: 15px;
+    margin-bottom: 20px;
+}
+
+/* normal label:input rows */
+.data-form .form-row,
+.upload-form .form-row {
+    margin-bottom: 10px;
+}
+
+.data-form .form-row label,
+.upload-form .form-row label {
+    display: inline-block;
+    width: 130px;
+    font-weight: bold;
+}
+
+.data-form .form-row input,
+.upload-form .form-row input {
+    padding: 5px;
+    width: 220px;
+}
+
+/* ===== Buttons ===== */
+
+button {
+    width: 180px;   /* smaller width */
+    padding: 8px 12px;
+    font-size: 14px;
+    border-radius: 6px;
+    background-color: #0066ff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #004ec9;
+}
+
+/* center the main submit button inside forms if needed */
+.grid-form button[type="submit"],
+.data-form button[type="submit"],
+.upload-form button[type="submit"] {
+    display: block;
+    margin: 10px auto;
+}
+
+/* ===== Messages ===== */
+
+.message {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 4px;
+    background-color: #e0f3e0;
+    border: 1px solid #8ac28a;
+}
+
+.message-box.error {
+    background: #ffe6e6;
+    border-left: 5px solid #cc0000;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 6px;
+    color: #660000;
+}
+
+/* ===== Generic table (fallback) ===== */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+td, th {
+    padding: 8px;
+    border: 1px solid #ccc;
+}
+
+th {
+    background-color: #003399;
+    color: white;
+}
+
+/* ===== Add Book form: 3x3 grid ===== */
+
+.grid-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* only form rows inside .grid-form become grid */
+.grid-form .form-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+}
+
+.form-group label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 6px;
+    white-space: nowrap;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+/* inline label+input if needed somewhere */
+.inline-field {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ===== Books Data table & scrolling ===== */
+
+/* wrapper keeps table inside page and adds its own horizontal scroll */
+.table-wrapper {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;      /* horizontal scroll if needed */
+    margin-top: 15px;
+    display: block;
+}
+
+/* main books table */
+.books-table {
+    width: 100%;
+    font-size: 12px;
+    border-collapse: collapse;
+    table-layout: fixed;   /* helps control column width and wrap */
+}
+
+/* cells & headers inside books table */
+/* Header cells: DO NOT wrap */
+.books-table th {
+    padding: 8px;
+    border: 1px solid #ddd;
+    text-align: left;
+    white-space: nowrap;     /* ❗ Header stays in one line */
+    background-color: #003399;
+    color: white;
+}
+
+/* Data cells: CAN wrap */
+.books-table td {
+    padding: 8px;
+    border: 1px solid #ddd;
+    text-align: left;
+    word-break: break-word;     /* break long words */
+    overflow-wrap: anywhere;    /* wrap long URLs/text */
+    white-space: normal;        /* allow wrapping */
+}
+
+/* specifically control description column width */
+.books-table td.book-description {
+    max-width: 300px;
+}
+
+/* ===== Search bar on Data page ===== */
+
+.search-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.search-form input {
+    flex: 1;
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.search-form button {
+    width: auto;
+    padding: 8px 14px;
+}

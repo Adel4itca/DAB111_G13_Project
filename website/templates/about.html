@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+<!-- This page displays project details, dataset description, data-cleaning steps, and variable definitions for the Book Dataset application. -->
+
+{% block title %}About Dataset{% endblock %}
+
+{% block content %}
+<div class="container">
+
+    <h1 class="page-title">About the Book Dataset Project</h1>
+
+    <!-- Student Info -->
+    <section class="section-card">
+        <h2 class="section-title">Student Information</h2>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Student Number</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Adel Hasan</td>
+                    <td>0888146</td>
+                </tr>
+                <tr>
+                    <td>Sumit Singh Gulshan</td>
+                    <td>0888735</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Project Purpose -->
+    <section class="section-card">
+        <h2 class="section-title">Project Purpose</h2>
+
+        <p>
+            This project was created to demonstrate the complete data analysis workflow covered 
+            in the DAB111 course. It includes collecting the dataset, cleaning and preparing the data, 
+            storing the processed data in a SQLite database, and developing a dynamic Flask application 
+            that allows users to interact with the data through CRUD operations, searching, and 
+            statistical visualization.
+        </p>
+    </section>
+
+    <!-- Dataset Info -->
+    <section class="section-card">
+        <h2 class="section-title">About the Dataset</h2>
+
+        <p><strong>Dataset Name:</strong> {{ dataset.name }}</p>
+        <p><strong>Description:</strong> {{ dataset.description }}</p>
+        <p><strong>Data Source:</strong> {{ dataset.source }}</p>
+    </section>
+
+    <!-- Data Preparation -->
+    <section class="section-card">
+        <h2 class="section-title">Data Preparation and Cleaning</h2>
+
+        <ul>
+            <li>Removed irrelevant or duplicate rows</li>
+            <li>Handled missing values to ensure clean data</li>
+            <li>Converted Price, Price After Tax, and Tax columns to numeric format</li>
+            <li>Saved the cleaned data into a CSV file for database loading</li>
+            <li>Created the SQLite database table using the cleaned dataset</li>
+        </ul>
+    </section>
+
+    <!-- Variables Table -->
+    <section class="section-card">
+        <h2 class="section-title">Variables in the Dataset</h2>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for var in variables %}
+                <tr>
+                    <td>{{ var.name }}</td>
+                    <td>{{ var.type }}</td>
+                    <td>{{ var.description }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Documentation Button -->
+    <section class="section-card">
+        <h2 class="section-title">Project Documentation</h2>
+
+        <a href="https://github.com/Adel4itca/DAB111_G13_Project/blob/main/readme.md"
+           target="_blank"
+           style="padding:10px 20px; background:#4CAF50; color:white; text-decoration:none; border-radius:6px;">
+                Open README 
+        </a>
+    </section>
+
+</div>
+{% endblock %}

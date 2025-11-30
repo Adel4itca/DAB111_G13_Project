@@ -1,0 +1,21 @@
+body {
+    background-color: #ffe6e6;  /* light red to test */
+    font-family: Arial, sans-serif;
+    margin: 30px;
+}
+
+h1 {
+    color: #003399;
+    font-size: 32px;
+}
+
+nav a {
+    margin-right: 15px;
+    text-decoration: none;
+    color: blue;
+    font-weight: bold;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}

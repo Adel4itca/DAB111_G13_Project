@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+<!-- This is the Home page of the DAB111 Book App.
+     It introduces the project purpose and provides a summary of all available features,
+     including viewing data, uploading CSV files, adding/deleting records, and showing category statistics.
+-->
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Welcome to the DAB111 Group13 Project</h2>
+
+    <p>
+        This web application was developed as part of the DAB111 course to demonstrate 
+        the complete data workflow from raw data to a fully functional Flask-based system. 
+        The project integrates <strong>data collection</strong>, <strong>data cleaning</strong>, 
+        <strong>database management</strong>, and <strong>web development</strong>.
+    </p>
+
+    <p>
+        Using this system, you can perform the following tasks:
+    </p>
+
+    <ul>
+        <li>View summary information about the dataset</li>
+        <li>Display all book records stored in the SQLite database</li>
+        <li>Upload CSV files and automatically insert them into the database</li>
+        <li>Add new book records manually</li>
+        <li>Delete book records using BookID</li>
+        <li>Analyze category distribution through histograms</li>
+    </ul>
+
+    <p>
+        This platform provides a hands-on experience combining 
+        Python programming, SQL queries, Flask development, and data visualization.
+    </p>
+</div>
+{% endblock %}

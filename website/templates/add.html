@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+<!--
+This page provides a form for adding a new book record into the SQLite database.
+Users enter BookID, Title, Category, Price details, Reviews, and Rating.
+Server-side validation checks if the BookID already exists before inserting.
+Success or error messages are displayed after form submission.
+-->
+{% block title %}Add Book{% endblock %}
+
+{% block content %}
+
+<h2>Add Book</h2>
+
+<div class="container">
+
+    {% if error %}
+        <div class="message-box error">{{ error }}</div>
+    {% endif %}
+
+    {% if message %}
+        <div class="message-box">{{ message }}</div>
+    {% endif %}
+
+    <form method="POST" action="/add" class="grid-form">
+
+        <!-- Row 1 -->
+        <div class="form-row">
+            <div class="form-group">
+                <label>Book ID:</label>
+                <input type="text" name="BookID" required
+                       pattern="^[A-Za-z0-9]+$">
+            </div>
+
+            <div class="form-group">
+                <label>Title:</label>
+                <input type="text" name="Title">
+            </div>
+
+            <div class="form-group">
+                <label>Category:</label>
+                <input type="text" name="Category">
+            </div>
+        </div>
+
+        <!-- Row 2 -->
+        <div class="form-row">
+            <div class="form-group">
+                <label>Price:</label>
+                <input type="text" name="Price">
+            </div>
+            <div class="form-group">
+                <label>Price After Tax:</label>
+                <input type="text" name="PriceTax">
+            </div>
+
+            <div class="form-group">
+                <label>Tax Amount:</label>
+                <input type="text" name="Tax">
+            </div>
+        </div>
+
+        <!-- Row 3 -->
+        <div class="form-row">
+            <div class="form-group">
+                <label>Availability:</label>
+                <input type="text" name="Stock">
+            </div>
+
+            <div class="form-group">
+                <label>Number of Reviews:</label>
+                <input type="text" name="Reviews">
+            </div>
+            <div class="form-group">
+                <label>Stars:</label>
+                <input type="text" name="Rating">
+            </div>
+        </div>
+
+        <button type="submit">Add Book</button>
+
+    </form>
+
+</div>
+
+{% endblock %}

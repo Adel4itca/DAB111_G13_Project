@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+<!--  This page allows the user to delete a book by BookID and displays success or error messages. -->
+
+{% block title %}Delete Book{% endblock %}
+
+{% block content %}
+
+<h2>Delete Book</h2>
+
+<div class="container">
+
+    {% if error %}
+        <div class="message-box error">
+            {{ error }}
+        </div>
+    {% endif %}
+
+    {% if message %}
+        <div class="message-box">
+            {{ message }}
+        </div>
+    {% endif %}
+
+    <form method="POST" action="/delete">
+        <label for="BookID">Book ID to delete:</label><br><br>
+        <input type="text" id="BookID" name="BookID" placeholder="Enter Book ID">
+        <button type="submit">Delete</button>
+    </form>
+
+</div>
+
+{% endblock %}
