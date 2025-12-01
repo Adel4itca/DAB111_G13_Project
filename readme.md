@@ -121,11 +121,11 @@ DAB111_G13_Project/
 ### Option 1 — Auto Installation (Recommended) 
 1. Download the Auto-Setup .BAT File
 Click below to download the auto-setup file:
- **[Download auto_setup.bat](https://raw.githubusercontent.com/Adel4itca/DAB111_G13_Project/main/auto_setup.bat)**
-(Right-click → “Save link as…” and save to your computer)
+ **[Download auto_setup.bat](https://raw.githubusercontent.com/Adel4itca/DAB111_G13_Project/main/auto_setup.bat)** <br>
+    (Right-click → “Save link as…” and save to your computer)
 
-1.1 Down Load from GitHub Direct:
-    Go to your auto_seuup.bat file on GitHub:
+    1.1 Down Load from GitHub Direct: <br>
+    Go to your auto_seuup.bat file on GitHub: <br>
     - On that page, click the Raw button (at the top-right of the file view).
     - Now you see just plain text in your browser.
     - Press Ctrl + S (Save).
@@ -148,7 +148,7 @@ The automatic installer will:
     Install all required packages from requirements.txt
     Automatically run app.py
 
-### Option 2 — Install the Project Manually**
+### Option 2 — Install the Project Manually
 
 ```bash
 git clone https://github.com/Adel4itca/DAB111_G13_Project.git
