@@ -50,7 +50,7 @@ echo.
 :: Ask for project location
 :: ---------------------------------------------
 set /p target_path=Enter FULL path to the project folder: 
-:: -- set /p folder_name=Enter project folder name (no spaces): 
+set /p folder_name=Enter project folder name (Optional) (no spaces): 
 
 set full_path=%target_path%\%folder_name%
 mkdir "%full_path%" 2>nul
