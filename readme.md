@@ -122,7 +122,7 @@ DAB111_G13_Project/
 1. Download the Auto-Setup .BAT File
 Click below to download the auto-setup file:
  **[Download auto_setup.bat](https://raw.githubusercontent.com/Adel4itca/DAB111_G13_Project/main/auto_setup.bat)** <br>
-    (Right-click → “Save link as…” and save to your computer)
+    (Right-click → “Save link as…” and save to your computer) : Go step 2 to Run the Installer
 
     1.1 Down Load from GitHub Direct: <br>
     Go to your auto_seuup.bat file on GitHub: <br>
