@@ -115,8 +115,7 @@ DAB111_G13_Project/
 
 ---
 
-<h2><span style="color:#4CAF50;">Installation &amp; Setup Guide</span></h2>
-
+#  **Installation & Setup Guide**
    **The project can be installed in two ways:**
 
 ### Option 1 — Auto Installation (Recommended) 
